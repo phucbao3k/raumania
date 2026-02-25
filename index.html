@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rau Má Quảng Thọ – Hương Vị Đất Cố Đô</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-deep: #1a3a2a;
+      --green-mid: #2d6a4f;
+      --green-fresh: #52b788;
+      --green-light: #95d5b2;
+      --cream: #f5f0e8;
+      --gold: #c9a84c;
+      --text: #1e1e1e;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background-color: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ========= NOISE TEXTURE OVERLAY ========= */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* ========= NAV ========= */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 5%;
+      background: rgba(245,240,232,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(82,183,136,0.2);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      color: var(--green-deep);
+      letter-spacing: 0.04em;
+    }
+
+    .nav-logo span {
+      color: var(--green-fresh);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--green-deep);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+
+    .nav-links a:hover { color: var(--green-fresh); }
+
+    /* ========= HERO ========= */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      background: var(--green-deep);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 5% 5rem 8%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left::after {
+      content: '';
+      position: absolute;
+      right: -80px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 160px;
+      height: 160px;
+      background: var(--green-deep);
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      line-height: 1.05;
+      color: #fff;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.45s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--green-light);
+    }
+
+    .hero-desc {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: rgba(255,255,255,0.68);
+      max-width: 400px;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.65s forwards;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 0.9rem 2.2rem;
+      background: var(--gold);
+      color: var(--green-deep);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.25s;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.85s forwards;
+      align-self: flex-start;
+    }
+
+    .cta-btn:hover {
+      background: #e0b95e;
+      transform: translateY(-2px);
+    }
+
+    .hero-right {
+      background: var(--green-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-visual {
+      position: relative;
+      width: 320px;
+      height: 420px;
+      z-index: 1;
+    }
+
+    /* Decorative circles */
+    .circle-bg {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .c1 { width: 500px; height: 500px; top: -100px; right: -150px; }
+    .c2 { width: 300px; height: 300px; bottom: -50px; left: -80px; }
+
+    /* Glass card in hero */
+    .glass-card {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      color: #fff;
+      animation: floatAnim 4s ease-in-out infinite;
+    }
+
+    .glass-card .drink-icon {
+      font-size: 5rem;
+      line-height: 1;
+      margin-bottom: 1rem;
+      display: block;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.25));
+    }
+
+    .glass-card .drink-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .glass-card .drink-sub {
+      font-size: 0.78rem;
+      opacity: 0.7;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-badge {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      color: var(--green-deep);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.3;
+      animation: spinSlow 12s linear infinite;
+    }
+
+    /* ========= ABOUT ========= */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 80vh;
+    }
+
+    .about-img-side {
+      background: linear-gradient(135deg, #2d6a4f, #1a3a2a);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 500px;
+    }
+
+    .leaf-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.08;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cellipse cx='40' cy='40' rx='18' ry='28' fill='%23fff'/%3E%3C/svg%3E");
+      background-size: 80px 80px;
+    }
+
+    .big-number {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(8rem, 15vw, 14rem);
+      color: rgba(255,255,255,0.1);
+      line-height: 1;
+      position: absolute;
+      bottom: -20px;
+      left: 20px;
+      pointer-events: none;
+    }
+
+    .about-stat-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      z-index: 1;
+      padding: 2rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      color: #fff;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: var(--green-light);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+
+    .about-content {
+      padding: 6rem 8% 6rem 6%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--cream);
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green-fresh);
+      border: 1px solid var(--green-fresh);
+      padding: 0.3rem 0.8rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3vw, 3rem);
+      color: var(--green-deep);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--green-fresh);
+    }
+
+    .section-body {
+      font-size: 0.95rem;
+      line-height: 1.95;
+      color: #555;
+      font-weight: 300;
+      margin-bottom: 1.2rem;
+    }
+
+    .divider-leaf {
+      width: 60px;
+      height: 3px;
+      background: var(--green-fresh);
+      margin: 1.5rem 0;
+      border-radius: 2px;
+    }
+
+    /* ========= PRODUCTS ========= */
+    #menu {
+      background: var(--green-deep);
+      padding: 7rem 5%;
+      text-align: center;
+    }
+
+    #menu .section-tag { color: var(--green-light); border-color: var(--green-light); }
+    #menu .section-title { color: #fff; }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .menu-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 2.5rem 1.8rem;
+      transition: transform 0.3s, background 0.3s;
+      cursor: default;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-8px);
+      background: rgba(255,255,255,0.12);
+    }
+
+    .menu-card .icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .menu-card .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .menu-card .card-vi {
+      font-size: 0.82rem;
+      color: var(--green-light);
+      letter-spacing: 0.06em;
+      margin-bottom: 1rem;
+    }
+
+    .menu-card .card-desc {
+      font-size: 0.83rem;
+      color: rgba(255,255,255,0.58);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    .price-tag {
+      display: inline-block;
+      margin-top: 1.2rem;
+      background: var(--gold);
+      color: var(--green-deep);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ========= BENEFITS ========= */
+    #benefits {
+      padding: 7rem 5%;
+      background: #fff;
+    }
+
+    .benefits-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .benefits-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .benefit-item {
+      padding: 2rem;
+      border-left: 3px solid var(--green-light);
+      background: #f9f9f6;
+      border-radius: 0 12px 12px 0;
+      transition: border-color 0.25s;
+    }
+
+    .benefit-item:hover {
+      border-color: var(--green-fresh);
+    }
+
+    .benefit-icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+
+    .benefit-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .benefit-desc {
+      font-size: 0.83rem;
+      color: #777;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    /* ========= STORY / TIMELINE ========= */
+    #story {
+      background: var(--cream);
+      padding: 7rem 5%;
+    }
+
+    .story-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .story-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 3rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--green-light);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3.5rem;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -3rem;
+      top: 4px;
+      width: 22px;
+      height: 22px;
+      background: var(--green-fresh);
+      border-radius: 50%;
+      border: 4px solid var(--cream);
+      box-shadow: 0 0 0 2px var(--green-fresh);
+    }
+
+    .timeline-year {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green-fresh);
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-text {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.85;
+      font-weight: 300;
+    }
+
+    /* ========= CTA BANNER ========= */
+    #cta-section {
+      background: linear-gradient(135deg, var(--green-mid) 0%, var(--green-deep) 100%);
+      padding: 6rem 5%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #cta-section::before {
+      content: '🌿';
+      font-size: 20rem;
+      position: absolute;
+      right: -3rem;
+      bottom: -4rem;
+      opacity: 0.05;
+      pointer-events: none;
+    }
+
+    #cta-section .section-title { color: #fff; }
+    #cta-section .section-body { color: rgba(255,255,255,0.7); max-width: 560px; margin: 0 auto 2rem; }
+
+    .cta-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-outline {
+      display: inline-block;
+      padding: 0.9rem 2.2rem;
+      border: 2px solid rgba(255,255,255,0.5);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: border-color 0.25s, background 0.25s;
+    }
+
+    .btn-outline:hover {
+      border-color: #fff;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* ========= FOOTER ========= */
+    footer {
+      background: #0d2318;
+      color: rgba(255,255,255,0.55);
+      padding: 3rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .footer-logo span { color: var(--green-fresh); }
+
+    .footer-info {
+      font-size: 0.8rem;
+      line-height: 1.8;
+      text-align: right;
+    }
+
+    .footer-copy {
+      width: 100%;
+      text-align: center;
+      font-size: 0.72rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin-top: 1rem;
+    }
+
+    /* ========= ANIMATIONS ========= */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes floatAnim {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ========= RESPONSIVE ========= */
+    @media (max-width: 768px) {
+      #hero, #about { grid-template-columns: 1fr; }
+      .hero-left { padding: 8rem 6% 5rem; }
+      .hero-left::after { display: none; }
+      .hero-right { min-height: 400px; }
+      .about-img-side { min-height: 300px; }
+      .about-content { padding: 4rem 6%; }
+      footer { flex-direction: column; text-align: center; }
+      .footer-info { text-align: center; }
+      nav { padding: 1rem 5%; }
+      .nav-links { gap: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Rau Má <span>Quảng Thọ</span></div>
+    <ul class="nav-links">
+      <li><a href="#about">Về Chúng Tôi</a></li>
+      <li><a href="#menu">Thực Đơn</a></li>
+      <li><a href="#benefits">Công Dụng</a></li>
+      <li><a href="#story">Câu Chuyện</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">🌿 Đặc sản Cố Đô Huế • Từ 1998</p>
+      <h1 class="hero-title">Rau Má <em>Quảng<br>Thọ</em></h1>
+      <p class="hero-desc">
+        Thức uống rau má xanh mướt được ép tươi từ vùng đất Quảng Thọ — nơi lưu giữ vị ngọt thanh mát nguyên chất của thiên nhiên và tình người xứ Huế.
+      </p>
+      <a href="#menu" class="cta-btn">Khám phá thực đơn</a>
+    </div>
+    <div class="hero-right">
+      <div class="circle-bg c1"></div>
+      <div class="circle-bg c2"></div>
+      <div class="hero-visual">
+        <div class="glass-card">
+          <span class="drink-icon">🥤</span>
+          <div class="drink-name">Rau Má Tươi</div>
+          <div class="drink-sub">Ép lạnh nguyên chất</div>
+        </div>
+      </div>
+      <div class="hero-badge">Rau<br>Sạch<br>100%</div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-img-side">
+      <div class="leaf-pattern"></div>
+      <div class="big-number">25</div>
+      <div class="about-stat-stack">
+        <div class="stat-item reveal">
+          <span class="stat-num">25+</span>
+          <span class="stat-label">Năm kinh nghiệm</span>
+        </div>
+        <div class="stat-item reveal">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">Rau sạch tự nhiên</span>
+        </div>
+        <div class="stat-item reveal">
+          <span class="stat-num">500+</span>
+          <span class="stat-label">Ly mỗi ngày</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-content">
+      <div class="reveal">
+        <span class="section-tag">Về chúng tôi</span>
+        <h2 class="section-title">Vị thanh mát<br>từ <em>đất Quảng Thọ</em></h2>
+        <div class="divider-leaf"></div>
+        <p class="section-body">
+          Rau Má Quảng Thọ ra đời từ vùng đất canh tác trù phú của xã Quảng Thọ, huyện Quảng Điền, tỉnh Thừa Thiên Huế — nơi nổi tiếng với những luống rau má xanh ngắt, mướt mà được trồng theo lối truyền thống không hóa chất.
+        </p>
+        <p class="section-body">
+          Mỗi ly rau má ở đây là một hành trình: từ bàn tay cần cù của người nông dân, qua quy trình ép lạnh giữ nguyên dưỡng chất, đến ly nước xanh trong mát tay bạn — đậm đà vị Huế, nhẹ nhàng mà khó quên.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu">
+    <span class="section-tag">Thực đơn</span>
+    <h2 class="section-title" style="margin-top:1rem">Đồ uống <em style="color:var(--green-light)">Đặc trưng</em></h2>
+    <div class="menu-grid">
+      <div class="menu-card reveal">
+        <span class="icon">🌱</span>
+        <div class="card-name">Rau Má Nguyên Chất</div>
+        <div class="card-vi">Pennywort Pure Juice</div>
+        <p class="card-desc">Ép lạnh 100% từ rau má tươi Quảng Thọ. Không pha nước, không đường, không chất bảo quản. Thanh mát tự nhiên.</p>
+        <span class="price-tag">10.000đ</span>
+      </div>
+      <div class="menu-card reveal">
+        <span class="icon">🍯</span>
+        <div class="card-name">Rau Má Mật Ong</div>
+        <div class="card-vi">Pennywort & Honey</div>
+        <p class="card-desc">Kết hợp vị đắng nhẹ của rau má với mật ong nguyên chất từ vùng núi A Lưới — dịu ngọt, bổ dưỡng.</p>
+        <span class="price-tag">15.000đ</span>
+      </div>
+      <div class="menu-card reveal">
+        <span class="icon">🥛</span>
+        <div class="card-name">Rau Má Sữa</div>
+        <div class="card-vi">Pennywort Milk</div>
+        <p class="card-desc">Hòa quyện rau má tươi cùng sữa đặc — thức uống mát lạnh được yêu thích nhất, phù hợp mọi lứa tuổi.</p>
+        <span class="price-tag">15.000đ</span>
+      </div>
+      <div class="menu-card reveal">
+        <span class="icon">🍃</span>
+        <div class="card-name">Sinh Tố Rau Má</div>
+        <div class="card-vi">Pennywort Smoothie</div>
+        <p class="card-desc">Xay nhuyễn cùng đá bào, thêm chút muối và đường dừa — đặc sánh, thơm mát, đúng điệu Huế xưa.</p>
+        <span class="price-tag">18.000đ</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section id="benefits">
+    <div class="benefits-inner">
+      <div class="benefits-header reveal">
+        <span class="section-tag">Công dụng</span>
+        <h2 class="section-title" style="margin-top:1rem">Tại sao uống <em>Rau Má?</em></h2>
+        <p class="section-body" style="max-width:560px;margin:0 auto">Rau má (Centella asiatica) là loài thảo dược quý được y học cổ truyền và hiện đại đánh giá cao vì vô số lợi ích sức khỏe.</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-item reveal">
+          <span class="benefit-icon">🧠</span>
+          <div class="benefit-title">Tăng cường trí nhớ</div>
+          <p class="benefit-desc">Các hoạt chất trong rau má giúp kích thích tuần hoàn máu não, cải thiện trí nhớ và giảm stress hiệu quả.</p>
+        </div>
+        <div class="benefit-item reveal">
+          <span class="benefit-icon">❤️</span>
+          <div class="benefit-title">Mát gan, giải nhiệt</div>
+          <p class="benefit-desc">Rau má có tính hàn, giúp thanh nhiệt, giải độc gan và làm mát cơ thể trong những ngày hè oi bức.</p>
+        </div>
+        <div class="benefit-item reveal">
+          <span class="benefit-icon">✨</span>
+          <div class="benefit-title">Đẹp da, chống lão hóa</div>
+          <p class="benefit-desc">Giàu antioxidants và collagen tự nhiên, rau má giúp làn da sáng khỏe, mờ thâm và chống lão hóa.</p>
+        </div>
+        <div class="benefit-item reveal">
+          <span class="benefit-icon">🛡️</span>
+          <div class="benefit-title">Tăng đề kháng</div>
+          <p class="benefit-desc">Vitamin C và khoáng chất dồi dào giúp tăng cường hệ miễn dịch, phòng ngừa bệnh tật theo mùa.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section id="story">
+    <div class="story-inner">
+      <div class="story-header reveal">
+        <span class="section-tag">Câu chuyện</span>
+        <h2 class="section-title" style="margin-top:1rem">Hành trình <em>của chúng tôi</em></h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1998 — Khởi đầu</div>
+          <div class="timeline-title">Những ly rau má đầu tiên</div>
+          <p class="timeline-text">Bà Quảng Thọ bắt đầu bán rau má ép tươi từ luống rau sau nhà, phục vụ bà con trong xóm nhỏ ven sông Ô Lâu. Chỉ vài chục ly mỗi ngày nhưng tiếng thơm đã lan xa.</p>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2008 — Mở rộng</div>
+          <div class="timeline-title">Điểm bán đầu tiên tại Huế</div>
+          <p class="timeline-text">Sau 10 năm, thương hiệu rau má Quảng Thọ được mang về Thành phố Huế, trở thành điểm dừng chân quen thuộc của người dân và du khách khắp cả nước.</p>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2015 — Chứng nhận</div>
+          <div class="timeline-title">Vùng trồng rau sạch được công nhận</div>
+          <p class="timeline-text">Vùng trồng rau má Quảng Thọ đạt chứng nhận VietGAP, khẳng định cam kết trồng rau sạch không thuốc trừ sâu, bảo vệ sức khỏe người tiêu dùng.</p>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">Hôm nay</div>
+          <div class="timeline-title">Tự hào hương vị Cố Đô</div>
+          <p class="timeline-text">Với hơn 25 năm giữ gìn hương vị thuần khiết, Rau Má Quảng Thọ trở thành niềm tự hào của người dân xứ Huế — một biểu tượng nhỏ nhắn nhưng đậm đà văn hóa.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta-section">
+    <span class="section-tag" style="color:var(--green-light);border-color:var(--green-light)">Ghé thăm</span>
+    <h2 class="section-title" style="margin-top:1rem">Hãy đến thưởng thức<br>một ly rau má <em style="color:var(--green-light)">Quảng Thọ</em></h2>
+    <p class="section-body">Chúng tôi mở cửa mỗi ngày từ 6:00 sáng tại chợ Quảng Thọ và các điểm bán ở Huế. Một ly xanh mướt — một buổi sáng trọn vẹn.</p>
+    <div class="cta-group">
+      <a href="#menu" class="cta-btn">Xem thực đơn</a>
+      <a href="#about" class="btn-outline">Tìm hiểu thêm</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Rau Má <span>Quảng Thọ</span></div>
+    <div class="footer-info">
+      <p>📍 Xã Quảng Thọ, Quảng Điền, Thừa Thiên Huế</p>
+      <p>🕕 Mở cửa: 06:00 – 18:00 hàng ngày</p>
+      <p>📞 Liên hệ: 0234 xxx xxxx</p>
+    </div>
+    <div class="footer-copy">
+      © 2025 Rau Má Quảng Thọ. Thức uống sạch từ thiên nhiên xứ Huế.
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, 100 * (Array.from(reveals).indexOf(entry.target) % 4));
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+  
+
+</body>
+</html>
