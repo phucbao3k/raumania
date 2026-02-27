@@ -364,6 +364,160 @@
       border-radius: 2px;
     }
 
+    /* ========= VIDEO SECTION ========= */
+    #video-section {
+      background: #0d1f15;
+      padding: 7rem 5%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #video-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(45,106,79,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    #video-section .section-tag { color: var(--green-light); border-color: var(--green-light); }
+    #video-section .section-title { color: #fff; margin-top: 1rem; margin-bottom: 0.8rem; }
+    #video-section .section-body { color: rgba(255,255,255,0.6); max-width: 580px; margin: 0 auto 3rem; }
+
+    .video-wrapper {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.07);
+    }
+
+    .video-wrapper::before {
+      content: '';
+      display: block;
+      padding-top: 56.25%; /* 16:9 */
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Custom play overlay for placeholder */
+    .video-placeholder {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #1a3a2a 0%, #2d6a4f 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .video-placeholder:hover {
+      background: linear-gradient(135deg, #2d6a4f 0%, #52b788 100%);
+    }
+
+    .video-placeholder.hidden { display: none; }
+
+    .play-btn {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: 3px solid rgba(255,255,255,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    .video-placeholder:hover .play-btn {
+      transform: scale(1.12);
+      background: rgba(255,255,255,0.25);
+    }
+
+    .play-btn svg {
+      width: 28px;
+      height: 28px;
+      fill: #fff;
+      margin-left: 4px;
+    }
+
+    .video-placeholder .vp-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .video-placeholder .vp-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .video-placeholder .vp-sub {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* Decorative floating leaves */
+    .float-leaf {
+      position: absolute;
+      font-size: 3rem;
+      opacity: 0.08;
+      pointer-events: none;
+      animation: floatLeaf 8s ease-in-out infinite;
+    }
+    .fl1 { top: 10%; left: 5%; animation-delay: 0s; }
+    .fl2 { top: 60%; right: 4%; animation-delay: 2.5s; font-size: 2rem; }
+    .fl3 { bottom: 12%; left: 10%; animation-delay: 5s; font-size: 1.5rem; }
+
+    @keyframes floatLeaf {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(8deg); }
+    }
+
+    /* Video tabs */
+    .video-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .vtab {
+      padding: 0.5rem 1.4rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: transparent;
+      font-family: 'Be Vietnam Pro', sans-serif;
+    }
+
+    .vtab.active, .vtab:hover {
+      color: #fff;
+      border-color: var(--green-fresh);
+      background: rgba(82,183,136,0.12);
+    }
+
     /* ========= PRODUCTS ========= */
     #menu {
       background: var(--green-deep);
@@ -693,6 +847,7 @@
     <ul class="nav-links">
       <li><a href="#about">Về Chúng Tôi</a></li>
       <li><a href="#menu">Thực Đơn</a></li>
+      <li><a href="#video-section">Video</a></li>
       <li><a href="#benefits">Công Dụng</a></li>
       <li><a href="#story">Câu Chuyện</a></li>
     </ul>
@@ -754,6 +909,38 @@
           Mỗi ly rau má ở đây là một hành trình: từ bàn tay cần cù của người nông dân, qua quy trình ép lạnh giữ nguyên dưỡng chất, đến ly nước xanh trong mát tay bạn — đậm đà vị Huế, nhẹ nhàng mà khó quên.
         </p>
       </div>
+    </div>
+  </section>
+
+  <!-- VIDEO SECTION -->
+  <section id="video-section">
+    <div class="float-leaf fl1">🌿</div>
+    <div class="float-leaf fl2">🍃</div>
+    <div class="float-leaf fl3">🌱</div>
+
+    <span class="section-tag reveal">Video giới thiệu</span>
+    <h2 class="section-title reveal">Từ luống rau đến<br><em style="color:var(--green-light)">ly nước xanh mát</em></h2>
+    <p class="section-body reveal">Hành trình của từng ly rau má Quảng Thọ — từ cánh đồng xanh ngắt ven sông Ô Lâu đến bàn tay người thưởng thức.</p>
+
+    <!-- Video tabs -->
+    <div class="video-tabs reveal">
+      <button class="vtab active" onclick="switchVideo(this, 'main')">🎬 Giới thiệu thương hiệu</button>
+      
+    </div>
+
+    <!-- Main video embed -->
+    <div class="video-wrapper reveal" id="videoContainer">
+      <!-- Placeholder shown until user clicks play -->
+      <video class="video-placeholder" src="rauma1.mp4" controls width="900" height="500">
+        <div class="play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="vp-tag">▶ Phát video</div>
+        <div class="vp-title" id="videoTitle">Rau Má Quảng Thọ — Hương Vị Cố Đô</div>
+        <div class="vp-sub" id="videoSub">Câu chuyện 25 năm gìn giữ vị thanh khiết của đất Huế</div>
+      </div>
+      
+      <div id="iframeContainer"></div>
     </div>
   </section>
 
@@ -900,8 +1087,67 @@
       });
     }, { threshold: 0.15 });
     reveals.forEach(el => observer.observe(el));
-  </script>
-  
 
+    // Video tab data
+    // Replace these YouTube IDs with real videos about rau má / Quảng Thọ / Huế
+    const videoData = {
+      main: {
+        youtubeId: 'dQw4w9WgXcQ', // 👈 Replace with your actual YouTube video ID
+        title: 'Rau Má Quảng Thọ — Hương Vị Cố Đô',
+        sub: 'Câu chuyện 25 năm gìn giữ vị thanh khiết của đất Huế'
+      },
+      farm: {
+        youtubeId: 'dQw4w9WgXcQ', // 👈 Replace with your actual YouTube video ID
+        title: 'Vùng Trồng Rau Má Quảng Thọ',
+        sub: 'Những luống rau xanh ngắt bên dòng sông Ô Lâu'
+      },
+      process: {
+        youtubeId: 'dQw4w9WgXcQ', // 👈 Replace with your actual YouTube video ID
+        title: 'Quy Trình Ép Rau Má Tươi',
+        sub: 'Từ ruộng rau đến ly nước xanh mát trong tay bạn'
+      }
+    };
+
+    let currentVideoKey = 'main';
+    let videoLoaded = false;
+
+    function switchVideo(btn, key) {
+      // Update tabs
+      document.querySelectorAll('.vtab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Update video data
+      currentVideoKey = key;
+      videoLoaded = false;
+
+      // Reset placeholder
+      const placeholder = document.getElementById('videoPlaceholder');
+      const iframeContainer = document.getElementById('iframeContainer');
+      placeholder.classList.remove('hidden');
+      iframeContainer.innerHTML = '';
+
+      document.getElementById('videoTitle').textContent = videoData[key].title;
+      document.getElementById('videoSub').textContent = videoData[key].sub;
+    }
+
+    function loadVideo() {
+      if (videoLoaded) return;
+      const data = videoData[currentVideoKey];
+      const placeholder = document.getElementById('videoPlaceholder');
+      const iframeContainer = document.getElementById('iframeContainer');
+
+      placeholder.classList.add('hidden');
+
+      iframeContainer.innerHTML = `
+        <iframe
+          src="https://www.youtube.com/embed/${data.youtubeId}?autoplay=1&rel=0&modestbranding=1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          style="position:absolute;inset:0;width:100%;height:100%;border:none;"
+        ></iframe>
+      `;
+      videoLoaded = true;
+    }
+  </script>
 </body>
 </html>
